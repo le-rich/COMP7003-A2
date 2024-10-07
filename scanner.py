@@ -63,18 +63,18 @@ def parse_ipv4_packet(hex_data):
     print(f"Identification: HEX: {identification}, INT: {int(identification, 16)}")
 
     # Special Print for Flags and Fragment Offset
-    print(f"Flags: BINARY: {flags_bits}")
-    print(f"    Reserved bit: {flags_bits[0]}")
-    print(f"    Don't Fragment (DF): {flags_bits[1]}")
-    print(f"    More Fragments (MF): {flags_bits[2]}")
+    print(f"Flags: BINARY: {flag_bits}")
+    print(f"    Reserved bit: {flag_bits[0]}")
+    print(f"    Don't Fragment (DF): {flag_bits[1]}")
+    print(f"    More Fragments (MF): {flag_bits[2]}")
     print(f"Fragment Offset: HEX: {flags_fragment_offset[1:]}, INT: {fragment_offset_bits}")
 
     print(f"Time to Live (TTL): HEX: {ttl}, INT: {int(ttl, 16)}")
     print(f"Protocol: HEX: {protocol}, INT: {int(protocol, 16)}")
     print(f"Header Checksum: HEX: {header_checksum}, INT: {int(header_checksum, 16)}")
     print(f"Source IP Address: {'.'.join(str(int(source_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
-    print(f"Destination IP Address: {'.'.join(str(int(dest_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
-    ip_header_length = ihl * 4 * 2
+    print(f"Destination IP Address: {'.'.join(str(int(destination_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
+    ip_header_length = int(ihl, 16) * 4 * 2
     return protocol, 28 + ip_header_length
 
 def parse_tcp_packet(hex_data, tcp_start):
@@ -92,7 +92,7 @@ def parse_tcp_packet(hex_data, tcp_start):
     checksum = hex_data[100:104]
     urgent_pointer = hex_data[104:108]
 
-    print("=== TCP Packet ===")
+    print("TCP Packet =======")
     print(f"Source Port: HEX: {source_port}, INT: {int(source_port, 16)}")
     print(f"Destination Port: HEX: {destination_port}, INT: {int(destination_port, 16)}")
     print(f"Sequence Number: HEX: {sequence_number}, INT: {int(sequence_number, 16)}")
@@ -124,7 +124,7 @@ def parse_udp_packet(hex_data, udp_start):
     length = hex_data[76:80]
     checksum = hex_data[80:84]
    
-    print("=== UDP Packet ===")
+    print("UDP Packet ======")
     print(f"Source Port: HEX: {source_port}, INT: {int(source_port, 16)}")
     print(f"Destination Port: HEX: {destination_port}, INT: {int(destination_port, 16)}")
     print(f"Length: HEX: {length}, INT: {int(length, 16)}")

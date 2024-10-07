@@ -173,7 +173,7 @@ def show_interactive_filter():
     elif choice == '4':
         portNum = input("Enter the port number to listen to: ")
         return f"port {portNum}"
-    else
+    else:
         return "ERR: INVALID FILTER"
 
 # Capture packets on a specified interface using a custom filter

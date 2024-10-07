@@ -43,7 +43,6 @@ def parse_arp_packet(hex_data):
     print(f"{'Target MAC Address':<30} {":".join(target_mac[i:i+2] for i in range(0, 12, 2))}")
     print(f"{'Target IP Address':<30} {":".join(str(int(target_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
     print("-" * 50)
-    return protocol
 
 def parse_ipv4_packet(hex_data):
     version = hex_data[28:29]
@@ -106,7 +105,7 @@ def parse_tcp_packet(hex_data, tcp_start):
     print(f"{'Source Port':<30} HEX: {source_port}, INT: {int(source_port, 16)}")
     print(f"{'Destination Port':<30} HEX: {destination_port}, INT: {int(destination_port, 16)}")
     print(f"{'Sequence Number':<30} HEX: {sequence_number}, INT: {int(sequence_number, 16)}")
-    print(f"{'Acknowledgment Number':<30} HEX: {acknowledgment_number}, INT: {int(acknowledgment_number, 16)}")
+    print(f"{'Acknowledgment Number':<30} HEX: {acknowledgement_number}, INT: {int(acknowledgement_number, 16)}")
     print(f"{'Data Offset':<30} HEX: {hex(data_offset)}, INT: {data_offset}")
     print(f"{'Reserved Bits':<30} BINARY: {reserved_bits}")
    

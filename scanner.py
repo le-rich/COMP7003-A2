@@ -121,7 +121,7 @@ def parse_tcp_packet(hex_data, tcp_start):
 def parse_udp_packet(hex_data, udp_start):
     source_port = hex_data[68:72]
     destination_port = hex_data[72:76]
-    rength = hex_data[76:80]
+    length = hex_data[76:80]
     checksum = hex_data[80:84]
    
     print("=== UDP Packet ===")
@@ -153,7 +153,7 @@ def packet_callback(packet):
         if (protocol == "06"):
             parse_tcp_packet(hex_data, ip_payload_start)
         elif (protocol == "11"):
-            prase_udp_packet(hex_data, ip_payload_start)
+            parse_udp_packet(hex_data, ip_payload_start)
 
 
 def show_interactive_filter():
@@ -163,7 +163,7 @@ def show_interactive_filter():
     print ("3 -- UDP")
     print ("4 -- Custom Port")
 
-    userChoice = input("")
+    choice = input("")
     if choice == '1':
         return "arp"
     elif choice == '2':

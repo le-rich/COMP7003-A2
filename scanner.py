@@ -17,7 +17,7 @@ def parse_ethernet_header(hex_data):
 
 def parse_arp_packet(hex_data):
     hardware_type = hex_data[28:32]
-    protocol_type = hex_data[32:26]
+    protocol_type = hex_data[32:36]
     hardware_size = hex_data[36:38]
     protocol_size = hex_data[38:40]
     opcode = hex_data[40:44]
@@ -125,8 +125,8 @@ def parse_udp_packet(hex_data, udp_start):
     checksum = hex_data[80:84]
    
     print("=== UDP Packet ===")
-    print(f"Source Port: HEX: {src_port}, INT: {int(source_port, 16)}")
-    print(f"Destination Port: HEX: {dest_port}, INT: {int(destination_port, 16)}")
+    print(f"Source Port: HEX: {source_port}, INT: {int(source_port, 16)}")
+    print(f"Destination Port: HEX: {destination_port}, INT: {int(destination_port, 16)}")
     print(f"Length: HEX: {length}, INT: {int(length, 16)}")
     print(f"Checksum: HEX: {checksum}, INT: {int(checksum, 16)}")
 

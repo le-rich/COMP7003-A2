@@ -74,7 +74,64 @@ def parse_ipv4_packet(hex_data):
     print(f"Header Checksum: HEX: {header_checksum}, INT: {int(header_checksum, 16)}")
     print(f"Source IP Address: {'.'.join(str(int(source_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
     print(f"Destination IP Address: {'.'.join(str(int(dest_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
-    return protocol
+    ip_header_length = ihl * 4 * 2
+    return protocol, 28 + ip_header_length
+
+def parse_tcp_packet(hex_data, tcp_start):
+    source_port = hex_data[68:72]
+    destination_port = hex_data[72:76]
+    sequence_number = hex_data[76:84]
+    acknowledgement_number = hex_data[84:92]
+    data_offset_reserved_flags = hex_data[92:96]
+
+    data_offset = int(data_offset_reserved_flags[0], 16)
+    reserved_bits = bin(int(data_offset_reserved_flags[1], 16))[2:].zfill(4)[:3]
+    flags_bits = bin(int(data_offset_reserved_flags[1:], 16))[2:].zfill(9)[-9:]
+   
+    window_size = hex_data[96:100]
+    checksum = hex_data[100:104]
+    urgent_pointer = hex_data[104:108]
+
+    print("=== TCP Packet ===")
+    print(f"Source Port: HEX: {source_port}, INT: {int(source_port, 16)}")
+    print(f"Destination Port: HEX: {destination_port}, INT: {int(destination_port, 16)}")
+    print(f"Sequence Number: HEX: {sequence_number}, INT: {int(sequence_number, 16)}")
+    print(f"Acknowledgment Number: HEX: {acknowledgment_number}, INT: {int(acknowledgment_number, 16)}")
+    print(f"Data Offset: HEX: {hex(data_offset)}, INT: {data_offset}")
+    print(f"Reserved Bits: BINARY: {reserved_bits}")
+   
+    print(f"Flags: BINARY: {flags_bits}")
+    print(f"    CWR: {flags_bits[0]}")
+    print(f"    ECE: {flags_bits[1]}")
+    print(f"    URG: {flags_bits[2]}")
+    print(f"    ACK: {flags_bits[3]}")
+    print(f"    PSH: {flags_bits[4]}")
+    print(f"    RST: {flags_bits[5]}")
+    print(f"    SYN: {flags_bits[6]}")
+    print(f"    FIN: {flags_bits[7]}")
+
+    print(f"Window Size: HEX: {window_size}, INT: {int(window_size, 16)}")
+    print(f"Checksum: HEX: {checksum}, INT: {int(checksum, 16)}")
+    print(f"Urgent Pointer: HEX: {urgent_pointer}, INT: {int(urgent_pointer, 16)}")
+    
+    tcp_header_length = data_offset * 4 * 2
+    payload_data = hex_data[tcp_start + tcp_header_length:]
+    print(f"Payload HEX: {payload_data}")
+
+def parse_udp_packet(hex_data, udp_start):
+    source_port = hex_data[68:72]
+    destination_port = hex_data[72:76]
+    length = hex_data[76:80]
+    checksum = hex_data[80:84]
+   
+    print("=== UDP Packet ===")
+    print(f"Source Port: HEX: {src_port}, INT: {int(source_port, 16)}")
+    print(f"Destination Port: HEX: {dest_port}, INT: {int(destination_port, 16)}")
+    print(f"Length: HEX: {length}, INT: {int(length, 16)}")
+    print(f"Checksum: HEX: {checksum}, INT: {int(checksum, 16)}")
+
+    payload_data = hex_data[udp_start + 16:]
+    print(f"Payload HEX: {payload_data}")
 
 # Function to handle each captured packet
 def packet_callback(packet):

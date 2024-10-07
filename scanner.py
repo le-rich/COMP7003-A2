@@ -29,8 +29,8 @@ def parse_arp_packet(hex_data):
     print("ARP Packet =======")
     print(f"Hardware Type: HEX: {hardware_type} ,INT: {int(hardware_type, 16)}")
     print(f"Protocol Type: HEX: {protocol_type}, INT: {int(protocol_type, 16)}")
-    print(f"Hardware Length: HEX: {hardware_len}, INT: {int(hardware_len, 16)}")
-    print(f"Protocol Length: HEX: {protocol_len}, INT: {int(protocol_len, 16)}")
+    print(f"Hardware Length: HEX: {hardware_size}, INT: {int(hardware_size, 16)}")
+    print(f"Protocol Length: HEX: {protocol_size}, INT: {int(protocol_size, 16)}")
     print(f"Opcode: HEX: {opcode}, INT: {int(opcode, 16)}")
     print(f"Sender MAC Address: {":".join(sender_mac[i:i+2] for i in range(0, 12, 2))}")
     print(f"Sender IP Address: {":".join(str(int(sender_ip[i:i+2], 16)) for i in range(0, 8, 2))}")
@@ -41,7 +41,7 @@ def parse_arp_packet(hex_data):
 def parse_ipv4_packet(hex_data):
     version = hex_data[28:29]
     ihl = hex_data[29:30]
-    type_of_service = [30:32]
+    type_of_service = hex_data[30:32]
     total_length = hex_data[32:36]
     identification = hex_data[36:40]
 
@@ -56,8 +56,8 @@ def parse_ipv4_packet(hex_data):
     destination_ip = hex_data[60:68]
 
     print("IPV4 Packet =======")
-    print(f"Version: HEX: {hex(version)}, INT: {version}")
-    print(f"IHL: HEX: {hex(ihl)}, INT: {ihl}")
+    print(f"Version: HEX: {version}, INT: {int(version, 16)}")
+    print(f"IHL: HEX: {ihl}, INT: {int(ihl, 16)}")
     print(f"Type of Service: HEX: {type_of_service}, INT: {int(type_of_service, 16)}")
     print(f"Total Length: HEX: {total_length}, INT: {int(total_length, 16)}")
     print(f"Identification: HEX: {identification}, INT: {int(identification, 16)}")
@@ -121,7 +121,7 @@ def parse_tcp_packet(hex_data, tcp_start):
 def parse_udp_packet(hex_data, udp_start):
     source_port = hex_data[68:72]
     destination_port = hex_data[72:76]
-    length = hex_data[76:80]
+    rength = hex_data[76:80]
     checksum = hex_data[80:84]
    
     print("=== UDP Packet ===")
@@ -145,15 +145,15 @@ def packet_callback(packet):
 
     # PROTOCOL NUMS HERE IN HEX
     # ARP
-    if ether_type == "0x0806":
+    if ether_type == "0806":
         parse_arp_packet(hex_data)
-    elif ether_type == "0x0800":
-        protocol = parse_ipv4_packet(hex_data)
+    elif ether_type == "0800":
+        protocol, ip_payload_start  = parse_ipv4_packet(hex_data)
         # TCP
-        if (protocol == "0x06"):
-            parse_tcp_packet(hex_data)
-        elif (protocol == "0x11"):
-            prase_udp_packet(hex_data)
+        if (protocol == "06"):
+            parse_tcp_packet(hex_data, ip_payload_start)
+        elif (protocol == "11"):
+            prase_udp_packet(hex_data, ip_payload_start)
 
 
 def show_interactive_filter():

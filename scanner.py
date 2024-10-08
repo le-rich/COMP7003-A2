@@ -17,7 +17,7 @@ def parse_ethernet_header(hex_data):
     print(f"{'Destination MAC':<30} {dest_mac_readable}")
     print(f"{'Source MAC':<30} {source_mac_readable}")
     print(f"{'EtherType':<30} {ether_type}")
-    print ("-" * 50)
+    print ("-" * 49)
     return ether_type
 
 def parse_arp_packet(hex_data):
